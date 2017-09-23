@@ -24,25 +24,25 @@ def get_response(request):
 		user_agent_cut = request[user_agent_start + len('User-Agent: ') :]
 		user_agent_end = user_agent_cut.find('\n')
 		user_agent = user_agent_cut[: user_agent_end]
-		return 'HTTP/1.1 200 OK\n\n' + 'Hello mister!\nYou are: ' + user_agent
+		return 'HTTP/1.1 200 OK\n\n' + 'Hello mister!\nYou are: ' + user_agent + "\n"
 	elif directory == "/test/":
-		return 'HTTP/1.1 200 OK\n\n' + request
+		return 'HTTP/1.1 200 OK\n\n' + request + "\n"
 	elif directory == "/media/":
-		return 'HTTP/1.1 200 OK\n\n' + media_list_str
+		return 'HTTP/1.1 200 OK\n\n' + media_list_str + "\n"
 	elif directory == "/media/" + "test1.txt":
 		file = open(directory_media + "/test1.txt", "r")
 		file_content = file.read()
 		file.close
-		return 'HTTP/1.1 200 OK\n\n' + file_content
+		return 'HTTP/1.1 200 OK\n\n' + file_content + "\n"
 	elif directory == "/media/" + "test2.txt":
 		file = open(directory_media + "/test2.txt", "r")
 		file_content = file.read()
 		file.close
-		return 'HTTP/1.1 200 OK\n\n' + file_content
+		return 'HTTP/1.1 200 OK\n\n' + file_content + "\n"
 	elif no_file_flag == 1:
-		return 'HTTP/1.1 404 Not found\n\n' + 'File not found' 
+		return 'HTTP/1.1 404 Not found\n\n' + 'File not found' + "\n"
 	else:
-		return 'HTTP/1.1 404 Not found\n\n' + 'Page not found' 
+		return 'HTTP/1.1 404 Not found\n\n' + 'Page not found' + "\n"
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, proto = 0)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
