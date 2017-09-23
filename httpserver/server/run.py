@@ -5,8 +5,8 @@ import os
 
 def get_response(request):
 
-	directory_start = request.find('GET ')
-	directory_cut = request[directory_start + 4: ]
+	directory_start = request.find(' ')
+	directory_cut = request[directory_start + 1: ]
 	directory_end = directory_cut.find(' ')
 	directory = directory_cut[: directory_end]
 
@@ -14,10 +14,15 @@ def get_response(request):
 	media_list = os.listdir(directory_media)
 	media_list_str = '\n'.join(media_list)
 
-	if directory[0 : 7] == "/media/" and (directory[7 : ] != "test1.txt" or directory[7 : ] != "test2.txt"): 
+	if directory[0 : 7] != "/media/":
+		no_file_flag = 2
+	else:
 		no_file_flag = 1
-	else: 
-		no_file_flag = 0
+		for i in media_list:
+			if directory[7 :] == i:
+				no_file_flag = 0
+				directory_media_file = i
+				break
 
 	if directory == "/":
 		user_agent_start = request.find('User-Agent: ')
@@ -29,16 +34,16 @@ def get_response(request):
 		return 'HTTP/1.1 200 OK\n\n' + request + "\n"
 	elif directory == "/media/":
 		return 'HTTP/1.1 200 OK\n\n' + media_list_str + "\n"
-	elif directory == "/media/" + "test1.txt":
-		file = open(directory_media + "/test1.txt", "r")
+	elif no_file_flag == 0 and directory == "/media/" + directory_media_file:
+		file = open(directory_media + "/" + directory_media_file, "r")
 		file_content = file.read()
 		file.close
 		return 'HTTP/1.1 200 OK\n\n' + file_content + "\n"
-	elif directory == "/media/" + "test2.txt":
-		file = open(directory_media + "/test2.txt", "r")
-		file_content = file.read()
-		file.close
-		return 'HTTP/1.1 200 OK\n\n' + file_content + "\n"
+	#elif directory == "/media/" + "test2.txt":
+	#	file = open(directory_media + "/test2.txt", "r")
+	#	file_content = file.read()
+	#	file.close
+	#	return 'HTTP/1.1 200 OK\n\n' + file_content + "\n"
 	elif no_file_flag == 1:
 		return 'HTTP/1.1 404 Not found\n\n' + 'File not found' + "\n"
 	else:
