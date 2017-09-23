@@ -5,8 +5,8 @@ import os
 
 def get_response(request):
 
-	directory_start = request.find('GET ')
-	directory_cut = request[directory_start + 4: ]
+	directory_start = request.find(' ')
+	directory_cut = request[directory_start + 1: ]
 	directory_end = directory_cut.find(' ')
 	directory = directory_cut[: directory_end]
 
